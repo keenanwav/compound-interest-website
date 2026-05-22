@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compound Interest — Grow Your Wealth</title>
+  <meta name="description" content="Understand and harness the power of compound interest to grow your wealth over time." />
+
+  <!-- Google Fonts: Inter (Notion's typeface) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ── Design Tokens ────────────────────────────────────────── */
+    :root {
+      --color-bg:        #f7f6f3;   /* Notion off-white */
+      --color-surface:   #ffffff;
+      --color-border:    #e3e2de;
+      --color-text:      #1a1a1a;
+      --color-muted:     #6b7280;
+      --color-accent:    #2f3437;   /* Notion near-black */
+      --color-tag-bg:    #ededec;
+      --color-tag-text:  #555550;
+      --radius-sm:       6px;
+      --radius-md:       10px;
+      --radius-lg:       14px;
+      --shadow-card:     0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.06);
+    }
+
+    /* ── Reset ────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      background: var(--color-bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--color-text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      border-bottom: 1px solid var(--color-border);
+      background: rgba(247, 246, 243, 0.85);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .nav-logo-icon {
+      width: 26px;
+      height: 26px;
+      background: var(--color-accent);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .nav-logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--color-muted);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      transition: background .15s, color .15s;
+    }
+
+    .nav-link:hover {
+      background: var(--color-tag-bg);
+      color: var(--color-text);
+    }
+
+    /* ── Main ─────────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 100px;
+      max-width: 640px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Inline tag */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--color-tag-text);
+      background: var(--color-tag-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      padding: 4px 12px;
+      margin-bottom: 28px;
+      letter-spacing: 0.01em;
+    }
+
+    .eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4caf7d;
+      flex-shrink: 0;
+    }
+
+    /* Heading */
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.15;
+      color: var(--color-text);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    h1 span {
+      color: var(--color-muted);
+    }
+
+    /* Subheading */
+    .subtitle {
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--color-muted);
+      text-align: center;
+      max-width: 420px;
+      margin-bottom: 48px;
+    }
+
+    /* ── Card ─────────────────────────────────────────────────── */
+    .card {
+      width: 100%;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .card-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--color-accent);
+      color: #fff;
+      border-radius: 999px;
+      padding: 3px 9px;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--color-muted);
+    }
+
+    .card-body {
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Feature rows */
+    .feature-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .feature-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feature-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .feature-locked {
+      color: var(--color-muted);
+      position: relative;
+    }
+
+    .feature-locked .feature-label {
+      text-decoration: line-through;
+      text-decoration-color: var(--color-border);
+    }
+
+    .lock-tag {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--color-muted);
+      background: var(--color-tag-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 4px 0;
+    }
+
+    /* Button group */
+    .card-footer {
+      padding: 20px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px 20px;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s, transform .1s, box-shadow .15s;
+      text-decoration: none;
+      border: none;
+      outline: none;
+      letter-spacing: -0.01em;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Primary — Premium */
+    .btn-primary {
+      background: var(--color-accent);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(0,0,0,.18);
+    }
+
+    .btn-primary:hover {
+      background: #1a1f22;
+      box-shadow: 0 2px 8px rgba(0,0,0,.22);
+    }
+
+    /* Secondary — Watch Ads */
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-tag-bg);
+      border-color: #ccc;
+    }
+
+    /* Button icons */
+    .btn svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .btn-label-small {
+      font-size: 11px;
+      font-weight: 400;
+      opacity: .65;
+      margin-left: 2px;
+    }
+
+    /* ── Formula block ────────────────────────────────────────── */
+    .formula-block {
+      background: var(--color-tag-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin: 40px 0 0;
+      text-align: center;
+    }
+
+    .formula-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 8px;
+    }
+
+    .formula {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--color-text);
+      font-feature-settings: "tnum";
+    }
+
+    .formula sub, .formula sup {
+      font-size: 12px;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-text {
+      font-size: 12.5px;
+      color: var(--color-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer-link {
+      font-size: 12.5px;
+      color: var(--color-muted);
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .footer-link:hover { color: var(--color-text); }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      nav { padding: 12px 18px; }
+      main { padding: 60px 16px 80px; }
+      .card-header, .card-body, .card-footer { padding-left: 20px; padding-right: 20px; }
+      footer { padding: 16px 18px; flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── Modal ────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      backdrop-filter: blur(2px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 40px rgba(0,0,0,.14);
+      padding: 28px;
+      max-width: 360px;
+      width: 100%;
+      animation: fadeUp .2s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .modal-body {
+      font-size: 13.5px;
+      color: var(--color-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: transparent;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--color-text);
+      transition: background .15s;
+    }
+
+    .modal-close:hover { background: var(--color-tag-bg); }
+
+    /* ── Ad & Code Modal Styles ───────────────────────────────── */
+    .ad-container {
+      width: 100%;
+      min-height: 250px;
+      margin-bottom: 16px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-tag-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .timer {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-muted);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .timer-bar {
+      width: 100%;
+      height: 3px;
+      background: var(--color-border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .timer-progress {
+      height: 100%;
+      background: var(--color-accent);
+      border-radius: 999px;
+      transition: width 0.1s linear;
+    }
+
+    .code-block {
+      background: var(--color-tag-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-top: 16px;
+      text-align: center;
+    }
+
+    .code-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 8px;
+    }
+
+    .code-display {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--color-accent);
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+
+    .copy-btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text);
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: var(--color-border);
+    }
+
+    .copy-btn.copied {
+      background: var(--color-accent);
+      color: white;
+      border-color: var(--color-accent);
+    }
+
+    .code-hint {
+      font-size: 12px;
+      color: var(--color-muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-logo" aria-label="Compound Interest Home">
+      <div class="nav-logo-icon" aria-hidden="true">
+        <svg viewBox="0 0 16 16">
+          <polyline points="2,11 6,6 9,9 14,3"/>
+        </svg>
+      </div>
+      <span class="nav-logo-text">Compound</span>
+    </a>
+    <div class="nav-links">
+      <a href="#how-it-works" class="nav-link">How it works</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+    </div>
+  </nav>
+
+  <!-- ── Main Content ────────────────────────────────────────── -->
+  <main id="pricing">
+    <!-- Eyebrow tag -->
+    <div class="eyebrow" aria-label="Status: Active">
+      <span class="eyebrow-dot" aria-hidden="true"></span>
+      Unlock the 8th Wonder of the World
+    </div>
+
+    <!-- Headline -->
+    <h1>Grow wealth<br /><span>while you sleep.</span></h1>
+
+    <!-- Subheadline -->
+    <p class="subtitle">
+      Compound interest turns small, consistent contributions into extraordinary results.
+      Choose a plan to start calculating your future today.
+    </p>
+
+    <!-- ── Pricing Card ──────────────────────────────────────── -->
+    <div class="card" role="region" aria-label="Premium plan options">
+      <!-- Card header -->
+      <div class="card-header">
+        <div class="card-header-top">
+          <span class="card-title">Premium Access</span>
+          <span class="badge" aria-label="Recommended">Recommended</span>
+        </div>
+        <span class="card-subtitle">Full access to all features, no interruptions.</span>
+      </div>
+
+      <!-- Features list -->
+      <div class="card-body" role="list" aria-label="Features included">
+
+        <!-- Included -->
+        <div class="feature-row" role="listitem">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 18 18" fill="none" stroke="#4caf7d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l4 4 8-8"/>
+            </svg>
+          </span>
+          <span class="feature-label">Unlimited interest calculations</span>
+        </div>
+
+        <div class="feature-row" role="listitem">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 18 18" fill="none" stroke="#4caf7d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l4 4 8-8"/>
+            </svg>
+          </span>
+          <span class="feature-label">Multi-year projection charts</span>
+        </div>
+
+        <div class="feature-row" role="listitem">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 18 18" fill="none" stroke="#4caf7d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l4 4 8-8"/>
+            </svg>
+          </span>
+          <span class="feature-label">Export to PDF &amp; CSV</span>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Locked (free tier) -->
+        <div class="feature-row feature-locked" role="listitem" aria-label="Locked feature: Monthly contribution planner">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 18 18" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="8" width="10" height="8" rx="1.5"/>
+              <path d="M6 8V6a3 3 0 0 1 6 0v2"/>
+            </svg>
+          </span>
+          <span class="feature-label">Monthly contribution planner<span class="lock-tag">Free</span></span>
+        </div>
+
+        <div class="feature-row feature-locked" role="listitem" aria-label="Locked feature: Inflation-adjusted returns">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 18 18" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="8" width="10" height="8" rx="1.5"/>
+              <path d="M6 8V6a3 3 0 0 1 6 0v2"/>
+            </svg>
+          </span>
+          <span class="feature-label">Inflation-adjusted returns<span class="lock-tag">Free</span></span>
+        </div>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="card-footer">
+
+        <!-- Primary CTA: Premium -->
+        <button
+          class="btn btn-primary"
+          aria-label="Get Premium access"
+          onclick="openModal('premium')"
+        >
+          <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <polygon points="7.5,1 9.5,5.5 14.5,6.2 11,9.5 11.8,14.5 7.5,12 3.2,14.5 4,9.5 0.5,6.2 5.5,5.5"/>
+          </svg>
+          Get Premium
+          <span class="btn-label-small">— one-time unlock</span>
+        </button>
+
+        <!-- Secondary CTA: Watch Ads -->
+        <button
+          class="btn btn-secondary"
+          aria-label="Watch Ads to Unlock Premium"
+          onclick="openModal('ads')"
+        >
+          <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="7.5" cy="7.5" r="6.5"/>
+            <polygon points="6,5 11,7.5 6,10"/>
+          </svg>
+          Watch Ads to Unlock Premium
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Formula callout -->
+    <div class="formula-block" id="how-it-works" aria-label="Compound interest formula">
+      <div class="formula-label">The Formula</div>
+      <div class="formula" aria-label="A = P times (1 + r over n) to the power of nt">
+        A = P &times; (1 + r/n)<sup>nt</sup>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-text">&copy; 2025 Compound. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Terms</a>
+      <a href="#" class="footer-link">Contact</a>
+    </div>
+  </footer>
+
+  <!-- ── Modals ──────────────────────────────────────────────── -->
+
+  <!-- Premium modal -->
+  <div
+    id="modal-premium"
+    class="modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-premium-title"
+    onclick="closeOnOverlay(event, 'premium')"
+  >
+    <div class="modal">
+      <div class="modal-title" id="modal-premium-title">&#127775; Go Premium</div>
+      <div class="modal-body">
+        This is a placeholder for your payment or account flow. Connect your billing provider
+        (e.g., Stripe, RevenueCat, App Store) to activate this step.
+      </div>
+      <button class="modal-close" onclick="closeModal('premium')">Close</button>
+    </div>
+  </div>
+
+  <!-- Ads modal -->
+  <div
+    id="modal-ads"
+    class="modal-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-ads-title"
+    onclick="closeOnOverlay(event, 'ads')"
+  >
+    <div class="modal">
+      <div class="modal-title" id="modal-ads-title">&#127916; Watch an Ad</div>
+      <div class="modal-body">
+        Watch a 30-second ad to unlock Premium access to your Chrome extension.
+      </div>
+
+      <!-- Ad container — populated dynamically on button click -->
+      <div class="ad-container" id="ad-space" style="display: none;"></div>
+
+      <!-- Timer (shown while ad plays) -->
+      <div id="timer-section" style="display: none;">
+        <div class="timer">
+          Watch for <strong id="timer-count">30</strong> seconds...
+          <div class="timer-bar">
+            <div class="timer-progress" id="timer-progress" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code display (shown after ad) -->
+      <div id="code-section" style="display: none;">
+        <div class="code-block">
+          <div class="code-label">Your Premium Unlock Code</div>
+          <div class="code-display" id="premium-code">Loading...</div>
+          <button class="copy-btn" id="copy-btn" onclick="copyCode()">Copy Code</button>
+          <div class="code-hint">
+            ✓ Paste this code in your Chrome extension settings to unlock Premium.
+          </div>
+        </div>
+      </div>
+
+      <button class="modal-close" id="ads-close-btn" onclick="closeModal('ads')" style="display: none;">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let adTimerInterval = null;
+    let currentAdDuration = 30;
+
+    function openModal(id) {
+      const overlay = document.getElementById('modal-' + id);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      // Start ad flow if ads modal
+      if (id === 'ads') {
+        startAdFlow();
+      }
+
+      // Move focus into modal
+      const closeBtn = overlay.querySelector('button');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal(id) {
+      const overlay = document.getElementById('modal-' + id);
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+
+      // Clear ad timer if closed
+      if (id === 'ads' && adTimerInterval) {
+        clearInterval(adTimerInterval);
+        adTimerInterval = null;
+      }
+
+      // Reset ad UI
+      if (id === 'ads') {
+        resetAdUI();
+      }
+    }
+
+    function closeOnOverlay(event, id) {
+      if (event.target === event.currentTarget) closeModal(id);
+    }
+
+    function startAdFlow() {
+      // Reset UI
+      resetAdUI();
+
+      // Show ad space and timer
+      document.getElementById('ad-space').style.display = 'block';
+      document.getElementById('timer-section').style.display = 'block';
+      document.getElementById('code-section').style.display = 'none';
+      document.getElementById('ads-close-btn').style.display = 'none';
+
+      currentAdDuration = 30;
+      updateTimer();
+
+      // Lazily inject AdSense script only on first click, then push ad unit
+      function pushAdUnit() {
+        var adSpace = document.getElementById('ad-space');
+        adSpace.innerHTML = '';
+        var ins = document.createElement('ins');
+        ins.className = 'adsbygoogle';
+        ins.style.cssText = 'display:inline-block;width:300px;height:250px';
+        ins.setAttribute('data-ad-client', 'ca-pub-5154234384505350');
+        ins.setAttribute('data-ad-slot', '1234567890');
+        adSpace.appendChild(ins);
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {}
+      }
+
+      if (window.adsbygoogle) {
+        // Script already loaded — push immediately
+        pushAdUnit();
+        beginCountdown();
+      } else {
+        // First time — inject the script, then push once loaded
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5154234384505350';
+        script.crossOrigin = 'anonymous';
+        script.onload = function () {
+          pushAdUnit();
+          beginCountdown();
+        };
+        script.onerror = function () {
+          // Ad blocker or network issue — still run the countdown so user can get a code
+          beginCountdown();
+        };
+        document.head.appendChild(script);
+      }
+    }
+
+    function beginCountdown() {
+      // Start countdown
+      adTimerInterval = setInterval(function () {
+        currentAdDuration--;
+        updateTimer();
+
+        if (currentAdDuration <= 0) {
+          clearInterval(adTimerInterval);
+          adTimerInterval = null;
+          completeAdWatch();
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      document.getElementById('timer-count').textContent = Math.max(0, currentAdDuration);
+      const progress = (currentAdDuration / 30) * 100;
+      document.getElementById('timer-progress').style.width = progress + '%';
+    }
+
+    function completeAdWatch() {
+      // Hide ad and timer
+      document.getElementById('ad-space').style.display = 'none';
+      document.getElementById('timer-section').style.display = 'none';
+
+      // Generate unique code
+      const code = generatePremiumCode();
+      document.getElementById('premium-code').textContent = code;
+
+      // Show code section
+      document.getElementById('code-section').style.display = 'block';
+      document.getElementById('ads-close-btn').style.display = 'block';
+      document.getElementById('ads-close-btn').focus();
+    }
+
+    function generatePremiumCode() {
+      // Generate a unique code: prefix + timestamp + random
+      const prefix = 'COMP';
+      const timestamp = Date.now().toString(36).toUpperCase();
+      const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+      return prefix + '-' + timestamp + '-' + random;
+    }
+
+    function copyCode() {
+      const code = document.getElementById('premium-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copy-btn');
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Copied!';
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function resetAdUI() {
+      document.getElementById('ad-space').style.display = 'none';
+      document.getElementById('timer-section').style.display = 'none';
+      document.getElementById('code-section').style.display = 'none';
+      document.getElementById('ads-close-btn').style.display = 'none';
+      document.getElementById('premium-code').textContent = 'Loading...';
+      currentAdDuration = 30;
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        ['premium', 'ads'].forEach(closeModal);
+      }
+    });
+  </script>
+
+</body>
+</html>
